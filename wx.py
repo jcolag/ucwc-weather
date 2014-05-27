@@ -140,14 +140,14 @@ def currentForecast(city_id, api_id):
 		first = False
 	return table
 
-def layoutData(win, icon, conditions, forecast):
+def layoutData(win, path, icon, conditions, forecast):
 	del widgets[:]
 	lCurTitle = Label(win, text='Current Conditions')
 	lCurrent = Label(win, text=out)
 	lForecast = Label(win, text='Forecast')
 	bOk = Button(win, text="OK", command=win.quit)
 	bRef = Button(win, text='Refresh', command=refreshData)
-	nameIcon = icon + ".gif"
+	nameIcon = path + "/" + icon + ".gif"
 	photo = PhotoImage(file=nameIcon)
 	lWeather = Label(win, image=photo)
 	lWeather.photo = photo
@@ -169,7 +169,7 @@ def layoutData(win, icon, conditions, forecast):
 		for col in line.split(','):
 			tn = col.split(';')
 			if len(tn) > 1:
-				nameImg = tn[1] + ".gif"
+				nameImg = path + "/" + tn[1] + ".gif"
 				photo = PhotoImage(file=nameImg)
 				cell = Label(win, text=tn[0], image=photo)
 				cell.photo = photo
@@ -192,10 +192,11 @@ def refreshData():
 	conditions, icon = currentConditions(city_id)
 	forecast = currentForecast(city_id)
 	out = "\n".join(conditions)
-	widgets = layoutData(root, icon, conditions, forecast)
+	widgets = layoutData(root, path, icon, conditions, forecast)
 
 config = ConfigParser.ConfigParser()
-config.read("wx.cfg")
+path = sys.path[0]
+config.read(path + "/wx.cfg")
 def_id = config.get("Identification", "city")
 api_id = config.get("Identification", "user")
 widgets = []
@@ -210,7 +211,7 @@ out = "\n".join(conditions)
 
 root = Tk()
 root.title('Weather')
-widgets = layoutData(root, icon, conditions, forecast)
+widgets = layoutData(root, path, icon, conditions, forecast)
 root.mainloop()
 root.destroy()
 

@@ -20,7 +20,7 @@ def updateTime(time, tz):
 	else:
 		tzs = 0
 	parts = time.split(':')
-	hh = int(parts[0]) + tzh
+	hh = (int(parts[0]) + tzh + 24) % 24
 	mm = int(parts[1]) + tzm
 	ss = int(parts[2]) + tzs
 	fixed = '{0:02d}:{1:02d}:{2:02d}'.format(hh, mm, ss)
